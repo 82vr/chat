@@ -7,23 +7,21 @@ local function chatMessage(str)
         local generalChannel = TextChatService:FindFirstChild("TextChannels"):FindFirstChild("RBXGeneral")
         if generalChannel then
             generalChannel:SendAsync(str)
-        else
-            warn("RBXGeneral channel not found!")
         end
     else
         local chatEvent = ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents"):FindFirstChild("SayMessageRequest")
         if chatEvent then
             chatEvent:FireServer(str, "All")
-        else
-            warn("DefaultChatSystemChatEvents not found!")
         end
     end
 end
 
-local blob = "\u{000D}"
-local clearMessage = ""..string.rep(blob, 197)..""
+local invisibleChar = "\u{001E}"
+local safeLength = 200 -- safe limit for multibyte/invisible chars
+local repetitions = 5   -- how many messages to send
 
+local clearMessage = string.rep(invisibleChar, safeLength)
 
-for i = 1, 5 do
-    chatMessage(clearMessage) 
+for i = 1, repetitions do
+    chatMessage(clearMessage)
 end
